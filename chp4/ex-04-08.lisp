@@ -7,6 +7,6 @@
 ;   it.  For example, EMPHASIZE3 of (LONG DAY) shold produce
 ;   (VERY LONG DAY).  What does EMPHASIZE3 of (VERY LONG DAY) produce?
 
-(defun ex-04-07-a (x)
-  (cond ((symbolp x) 'symbol)
-	(t 'not-a-symbol)))
+(defun emphasize3 (x)
+  (cond ((equal (car x) 'very) x)
+	(t (cons 'very x))))
