@@ -6,5 +6,18 @@
 ;   ROCK-SCISSORS-PAPER game. 
 
 
+(defun rockp (hand)
+  (equal hand 'ROCK))
 
+(defun scissorp (hand)
+  (equal hand 'SCISSOR))
 
+(defun paperp (hand)
+  (equal hand 'PAPER))
+
+(defun play (p1 p2)
+  (cond ((equal p1 p2) 'TIE)
+	((and (rockp p1) (scissorp p2)) 'FIRST-WINS)
+	((and (paperp p1) (rockp p2)) 'FIRST-WINS)
+	((and (scissorp p1) (paperp p2)) 'FIRST-WINS)
+	(t 'SECOND-WINS)))
