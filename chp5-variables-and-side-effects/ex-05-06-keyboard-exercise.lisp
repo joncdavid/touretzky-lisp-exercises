@@ -60,11 +60,18 @@
 ; returns either the sum of the two dice or the symbol SNAKE-EYES
 ; or BOXCARS if the sum is 2 or 12. (SAY-THROW '(3 4)) should return
 ; 7. (SAY-THROW '(6 6)) should returns BOXCARS.
+(defun say-throw (throw)
+  (let ((sum (+ (car throw) (cadr throw))))
+    (cond ((snake-eyes-p throw) 'snake-eyes)
+	  ((boxcars-p throw) 'boxcars)
+	  (t sum))))
+
 
 ; f) If you don't win or lose on the first throw of the dice, the
 ; value you threw becomes your "point," which will be explained
 ; shortly. Write a function, CRAPS, that produces the following sort
 ; of behavior.... TBD ...
+
 
 ; g) Once a point has been established, you continue throwing the
 ; dice until you either win by making the point again or lose by
@@ -118,6 +125,13 @@
        (not (instant-loss-p '(2 2)))
        (not (instant-loss-p '(4 5)))
        (not (instant-loss-p '(10 1))) ))
+
+(defun ut-say-throw ()
+; Unit test for SAY-THROW. Returns NIL if unit test fails.
+  (and (equal 'snake-eyes (say-throw '(1 1)))
+       (equal 'boxcars (say-throw '(6 6)))
+       (equal 3 (say-throw '(2 1)))
+       (equal 5 (say-throw '(3 2)))))
 
 
 (defun ut-ex-05-06-all ()
