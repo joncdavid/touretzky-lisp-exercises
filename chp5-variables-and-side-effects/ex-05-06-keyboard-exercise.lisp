@@ -70,14 +70,37 @@
 ; f) If you don't win or lose on the first throw of the dice, the
 ; value you threw becomes your "point," which will be explained
 ; shortly. Write a function, CRAPS, that produces the following sort
-; of behavior.... TBD ...
+; of behavior. Your solution should make use of the functions you
+; wrote in previous steps.
+(defun craps (throw)
+  (let* ((die1 (car throw))
+	 (die2 (cadr throw))
+	 (point (+ die1 die2)))
+    (cond ((instant-loss-p throw) (list 'throw die1 'and die2 '-- (say-throw throw) '-- 'you 'lose))
+	  ((instant-win-p throw) (list 'throw die1 'and die2 '-- (say-throw throw) '-- 'you 'win))
+	  (t (list 'throw die1 'and die2 '-- (say-throw throw) '-- 'your 'point 'is point)))))
 
 
 ; g) Once a point has been established, you continue throwing the
 ; dice until you either win by making the point again or lose by
 ; throwing a 7. Write the function TRY-FOR-POINT that simulates this
 ; part of the game, as follows:
-; ... TBD ...
+; (try-for-point 6) -> (THROW 3 AND 5 -- 8 -- THROW AGAIN)
+; (try-for-point 6) -> (THROW 5 AND 1 -- 6 -- YOU WIN)
+; (craps) -> (THROW 3 AND 6 -- YOUR POINT IS 9)
+; (try-for-point 9) -> (THROW 6 AND 1 -- 7 -- YOU LOSE)
+(defun try-for-point (target-point)
+  (let* ((throw (throw-dice))
+	 (die1 (car throw))
+	 (die2 (cadr throw))
+	 (point (+ die1 die2)))
+    (cond ((instant-win-p throw)
+	   (list 'THROW die1 'AND die2 '-- (say-throw throw) '-- 'you 'win))
+	  ((instant-loss-p throw)
+	   (list 'THROW die1 'AND die2 '-- (say-throw throw) '-- 'you 'lose))
+	  ((equal point target-point) (list 'throw die1 'and die2 '-- (say-throw throw) '-- 'you 'win))
+	  (t (list 'throw die1 'and die2 '-- (say-throw throw) '-- 'you 'lose)))))
+
 
 
 ;=====================================================================
@@ -133,6 +156,17 @@
        (equal 3 (say-throw '(2 1)))
        (equal 5 (say-throw '(3 2)))))
 
+(defun ut-craps ()
+; Unit test for CRAPS. Returns NIL if unit test fails.
+  (let ((msg1 '(THROW 5 AND 2 -- 7 -- YOU WIN))
+	(msg2 '(THROW 5 AND 6 -- 11 -- YOU WIN))
+	(msg3 '(THROW 1 AND 1 -- snake-eyes -- YOU LOSE))
+	(msg4 '(THROW 6 AND 6 -- boxcars -- YOU LOSE)))
+    (and (equal msg1 (craps '(5 2)))
+	 (equal msg2 (craps '(5 6)))
+	 (equal msg3 (craps '(1 1)))
+	 (equal msg4 (craps '(6 6))))))
+
 
 (defun ut-ex-05-06-all ()
 ; Unit test for all exercise 5.6 functions. Returns NIL if
@@ -141,4 +175,5 @@
        (ut-snake-eyes-p)
        (ut-boxcars-p)
        (ut-instant-win-p)
-       (ut-instant-loss-p) ))
+       (ut-instant-loss-p)
+       (ut-craps)))
