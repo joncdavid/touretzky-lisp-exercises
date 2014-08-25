@@ -145,4 +145,48 @@
 ;    Hint: use the result of the supporters function as a starting
 ;    point.
 (defun supp-cube (blockname)
-  ()) ;TBD...
+  (let ((supporters-list (supporters blockname))
+	(cube-list (car (fetch '(? shape cube)))))
+    (not (null (intersection supporters-list cube-list)))))
+
+
+; h) We are going to write a DESCRIPTION functino that returns the
+;    description of a block. (DESCRIPTION 'B2) will return
+;      (SHAPE BRICK COLOR RED SIZE SMALL SUPPORTS B1 LEFT-OF B3).
+;    We will do this in steps. First, write a function DESC1 that
+;    takes a block as input and returns all assertions dealing with
+;    that block. (DESC1 'B6) should return ((B6 SHAPE BRICK)
+;    (B6 COLOR PURPLE) (B6 SIZE LARGE)).
+(defun desc1 (blockname)
+  (fetch (list blockname '? '?)))
+
+
+; i) Write a function DESC2 of one input that calls DESC1 and strips
+;    the block name off each element of the result. (DESC 'B6) should
+;    return the list ((SHAPE BRICK) (COLOR PURPLE) (SIZE LARGE)).
+(defun desc2 (blockname)
+  (mapcar #'cdr (desc1 blockname)))
+
+
+; j) Write the DESCRIPTION function. It should take one input, call
+;    DESC2, and merge the resulting list of lists into a single list.
+;    (DESCRIPTION 'B6) should return (SHAPE BRICK COLOR PURPLE SIZE
+;    LARGE).
+(defun description (blockname)
+  (reduce #'append (desc2 blockname)))
+
+
+; k) What is the description of block B1? of block B4?
+;    B1: (SHAPE BRICK COLOR GREEN SIZE SMALL SUPPORTED-BY B2
+;         SUPPORTED-BY B3)
+;    B4: (SHAPE PYRAMID COLOR BLUE SIZE LARGE SUPPORTED-BY B5)
+;
+
+
+; l) Block B1 is made of wood, but block B2 is made of plastic. How
+;    Would you add this information to the database.
+;
+; Answer:
+;    Append these properties to the list.
+;    (append '(b1 material wood))
+;    (append '(b2 material plastic)).
