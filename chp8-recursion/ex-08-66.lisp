@@ -11,8 +11,11 @@
 ;   list whose first and third elements are arithmetic expressions
 ;   and whose middle element is one of +, -, *, or /.
 
-
 (defun arith-eval (expr)
   (cond ((null expr) nil)
 	((numberp expr) expr)
-	((or (equal
+	((equal 3 (length expr))
+	 (funcall (cadr expr)
+		  (arith-eval (car expr))
+		  (arith-eval (caddr expr))))
+	(t nil)))
